@@ -96,7 +96,12 @@ app.use((req, res, next) => {
  */
 app.get("/", homeController.index);
 app.get("/post", postController.getPosts);
-app.post("/post", check("url", "incorrect url").isURL(), passportConfig.isAuthenticated, postController.newPost);
+app.post(
+    "/post", 
+    check("url", "incorrect url").isURL(), 
+    passportConfig.isAuthenticated, 
+    postController.newPost
+);
 app.get("/login", userController.getLogin);
 app.post(
     "/login",
