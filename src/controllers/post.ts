@@ -1,6 +1,18 @@
-import { Request, Response, NextFunction } from "express";
-import { Post } from "../models/Post";
-import { check, validationResult, body } from "express-validator";
+import {Request, Response, NextFunction} from "express";
+import {Post} from "../models/Post";
+import {check, validationResult, body} from "express-validator";
+import * as passportConfig from "../config/passport";
+
+export const validate = (method: string) => {
+    switch (method) {
+        case 'createPost': {
+            return [
+                check("url", "incorrect url").isURL(),
+                passportConfig.isAuthenticated
+            ]
+        }
+    }
+}
 
 /**
  * GET /post
@@ -13,7 +25,7 @@ export const getPosts = (req: Request, res: Response) => {
         } else {
             res.statusCode = 500;
             // log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'server error' });
+            return res.send({error: 'server error'});
         }
     });
 };
@@ -47,7 +59,7 @@ export const createPost = (req: Request, res: Response, next: NextFunction) => {
  */
 export const deletePost = (req: Request, res: Response) => {
     Post.findById(req.params.id, (err, article) => {
-        if(!article) {
+        if (!article) {
             res.statusCode = 404;
             // return res.send({ error: 'not found' });
         }
