@@ -3,7 +3,7 @@ import { Post } from "../models/Post";
 import { check, validationResult, body } from "express-validator";
 
 /**
- * GET /posts
+ * GET /post
  * Posts page.
  */
 export const getPosts = (req: Request, res: Response) => {
@@ -13,13 +13,13 @@ export const getPosts = (req: Request, res: Response) => {
         } else {
             res.statusCode = 500;
             // log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'Server error' });
+            return res.send({ error: 'server error' });
         }
     });
 };
 
 /**
- * POST /posts
+ * POST /post
  * New post.
  */
 export const newPost = (req: Request, res: Response, next: NextFunction) => {
@@ -38,5 +38,26 @@ export const newPost = (req: Request, res: Response, next: NextFunction) => {
 
     post.save(e => {
         return res.sendStatus(200);
+    });
+};
+
+/**
+ * DELETE /post
+ * Posts page.
+ */
+export const deletePost = (req: Request, res: Response) => {
+    Post.findById(req.params.id, (err, article) => {
+        if(!article) {
+            res.statusCode = 404;
+            // return res.send({ error: 'not found' });
+        }
+        return article.remove(err => {
+            if (!err) {
+                // return res.sendStatus(200);
+            } else {
+                res.statusCode = 500;
+                // return res.send({ error: 'server error' });
+            }
+        });
     });
 };

@@ -19,7 +19,7 @@ import * as homeController from "./controllers/home";
 import * as userController from "./controllers/user";
 import * as apiController from "./controllers/api";
 import * as contactController from "./controllers/contact";
-import * as postController from "./controllers/posts";
+import * as postController from "./controllers/post";
 
 
 // API keys and Passport configuration
@@ -101,6 +101,11 @@ app.post(
     check("url", "incorrect url").isURL(), 
     passportConfig.isAuthenticated, 
     postController.newPost
+);
+app.delete(
+    "/post/:id",
+    passportConfig.isAuthenticated, 
+    postController.deletePost
 );
 app.get("/login", userController.getLogin);
 app.post(
