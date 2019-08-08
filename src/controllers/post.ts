@@ -2,10 +2,11 @@ import {Request, Response, NextFunction} from "express";
 import {Post} from "../models/Post";
 import {check, validationResult, body} from "express-validator";
 import * as passportConfig from "../config/passport";
+import {ActionType} from "../util/enums";
 
-export const validate = (method: string) => {
+export const validate = (method: ActionType) => {
     switch (method) {
-        case 'createPost': {
+        case ActionType.create: {
             return [
                 check("url", "incorrect url").isURL(),
             ]

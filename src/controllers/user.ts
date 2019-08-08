@@ -8,16 +8,17 @@ import {IVerifyOptions} from "passport-local";
 import {WriteError} from "mongodb";
 import {check, sanitize, validationResult} from "express-validator";
 import "../config/passport";
+import {ActionType} from "../util/enums";
 
-export const validate = (method: string) => {
+export const validate = (method: ActionType) => {
     switch (method) {
-        case 'userLogin': {
+        case ActionType.login: {
             return [
                 check("email", "email is not valid").isEmail(),
                 check("password", "password cannot be blank").isLength({min: 1}),
             ]
         }
-        case 'userCreate': {
+        case ActionType.create: {
             return [
                 check("email", "email is not valid").isEmail().equals('motors@live.ru'),
                 check("password", "password must be at least 4 characters long").isLength({min: 4}).custom((value, {req, location, path}) => {
