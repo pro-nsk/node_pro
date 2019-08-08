@@ -96,18 +96,20 @@ app.use((req, res, next) => {
  * Primary app routes.
  */
 app.get("/", homeController.index);
+
 app.get("/post", postController.getPosts);
 app.post(
     "/post", 
     check("url", "incorrect url").isURL(), 
     passportConfig.isAuthenticated, 
-    postController.newPost
+    postController.createPost
 );
 app.delete(
     "/post/:id",
     passportConfig.isAuthenticated, 
     postController.deletePost
 );
+
 app.get("/login", userController.getLogin);
 app.post(
     "/login",
@@ -122,8 +124,15 @@ app.get("/reset/:token", userController.getReset);
 app.post("/reset/:token", userController.postReset);
 app.get("/signup", userController.getSignup);
 app.post("/signup", 
-    check("email", "Email is not valid").isEmail().equals('motors@live.ru'),
-    check("password", "Password must be at least 4 characters long").isLength({ min: 4 }),
+    check("email", "email is not valid").isEmail().equals('motors@live.ru'),
+    check("password", "password must be at least 4 characters long").isLength({ min: 4 }).custom((value,{req, location, path}) => {
+        if (value !== req.body.confirmPassword) {
+            // trow error if passwords do not match
+            throw new Error("passwords don't match");
+        } else {
+            return value;
+        }
+    }),
     userController.postSignup
 );
 app.get("/contact", contactController.getContact);

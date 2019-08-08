@@ -22,7 +22,7 @@ export const getPosts = (req: Request, res: Response) => {
  * POST /post
  * New post.
  */
-export const newPost = (req: Request, res: Response, next: NextFunction) => {
+export const createPost = (req: Request, res: Response, next: NextFunction) => {
 
     const errors = validationResult(req);
 
