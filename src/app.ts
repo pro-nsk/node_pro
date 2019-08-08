@@ -30,6 +30,9 @@ import {ActionType} from "./util/enums";
 // Create Express server
 const app = express();
 
+const login = ActionType.login;
+const create = ActionType.create;
+
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 mongoose.Promise = bluebird;
@@ -99,18 +102,18 @@ app.use((req, res, next) => {
 app.get("/", homeController.index);
 
 app.get("/post", postController.getPosts);
-app.post("/post", postController.validate(ActionType.create), passportConfig.isAuthenticated, postController.createPost);
+app.post("/post", postController.validate(create), passportConfig.isAuthenticated, postController.createPost);
 app.delete("/post/:id", passportConfig.isAuthenticated, postController.deletePost);
 
 app.get("/login", userController.getLogin);
-app.post("/login", userController.validate(ActionType.login), userController.postLogin);
+app.post("/login", userController.validate(login), userController.postLogin);
 app.get("/logout", userController.logout);
 app.get("/forgot", userController.getForgot);
 app.post("/forgot", userController.postForgot);
 app.get("/reset/:token", userController.getReset);
 app.post("/reset/:token", userController.postReset);
 app.get("/signup", userController.getSignup);
-app.post("/signup",userController.validate(ActionType.create),userController.postSignup);
+app.post("/signup",userController.validate(create),userController.postSignup);
 app.get("/contact", contactController.getContact);
 app.post("/contact", contactController.postContact);
 app.get("/account", passportConfig.isAuthenticated, userController.getAccount);
