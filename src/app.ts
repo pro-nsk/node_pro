@@ -87,6 +87,7 @@ app.use(
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", req.get('origin'));
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
     res.header("Access-Control-Allow-Credentials", "true");
     next();
 });
@@ -120,7 +121,11 @@ app.post("/forgot", userController.postForgot);
 app.get("/reset/:token", userController.getReset);
 app.post("/reset/:token", userController.postReset);
 app.get("/signup", userController.getSignup);
-app.post("/signup", userController.postSignup);
+app.post("/signup", 
+    check("email", "Email is not valid").isEmail().equals('motors@live.ru'),
+    check("password", "Password must be at least 4 characters long").isLength({ min: 4 }),
+    userController.postSignup
+);
 app.get("/contact", contactController.getContact);
 app.post("/contact", contactController.postContact);
 app.get("/account", passportConfig.isAuthenticated, userController.getAccount);

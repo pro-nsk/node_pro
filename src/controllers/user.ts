@@ -81,9 +81,8 @@ export const getSignup = (req: Request, res: Response) => {
  * Create a new local account.
  */
 export const postSignup = (req: Request, res: Response, next: NextFunction) => {
-    check("email", "Email is not valid").isEmail();
-    check("password", "Password must be at least 4 characters long").isLength({ min: 4 });
-    check("confirmPassword", "Passwords do not match").equals(req.body.password);
+
+    check("confirmPassword", "Passwords do not match").equals(req.body.password),
     // eslint-disable-next-line @typescript-eslint/camelcase
     sanitize("email").normalizeEmail({ gmail_remove_dots: false });
 
