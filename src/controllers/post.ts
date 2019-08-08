@@ -8,7 +8,6 @@ export const validate = (method: string) => {
         case 'createPost': {
             return [
                 check("url", "incorrect url").isURL(),
-                passportConfig.isAuthenticated
             ]
         }
     }
