@@ -113,8 +113,9 @@ export const postSignup = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        req.flash("errors", errors.array());
-        return res.redirect("/signup");
+        // req.flash("errors", errors.array());
+        res.statusCode = 400;
+        return res.send({error: errors.array()[0].msg});
     }
 
     const user = new User({
@@ -125,8 +126,10 @@ export const postSignup = (req: Request, res: Response, next: NextFunction) => {
     User.findOne({email: req.body.email}, (err, existingUser) => {
         if (err) {return next(err);}
         if (existingUser) {
-            req.flash("errors", {msg: "Account with that email address already exists."});
-            return res.redirect("/signup");
+            // req.flash("errors", {msg: "Account with that email address already exists."});
+            // return res.redirect("/signup");
+            res.statusCode = 400;
+            return res.send({error: "account with that email address already exists"});
         }
         user.save((err) => {
             if (err) {return next(err);}
@@ -134,7 +137,7 @@ export const postSignup = (req: Request, res: Response, next: NextFunction) => {
                 if (err) {
                     return next(err);
                 }
-                res.redirect("/");
+                return res.sendStatus(200);
             });
         });
     });

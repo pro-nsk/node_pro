@@ -61,14 +61,14 @@ export const deletePost = (req: Request, res: Response) => {
     Post.findById(req.params.id, (err, article) => {
         if (!article) {
             res.statusCode = 404;
-            // return res.send({ error: 'not found' });
+            return res.send({ error: 'not found' });
         }
         return article.remove(err => {
             if (!err) {
-                // return res.sendStatus(200);
+                return res.sendStatus(200);
             } else {
                 res.statusCode = 500;
-                // return res.send({ error: 'server error' });
+                return res.send({ error: 'server error' });
             }
         });
     });
