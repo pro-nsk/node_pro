@@ -16,11 +16,11 @@ export const validate = (method: ActionType) => {
             return [
                 check("email", "email is not valid").isEmail(),
                 check("password", "password cannot be blank").isLength({min: 1}),
-            ]
+            ];
         }
         case ActionType.create: {
             return [
-                check("email", "email is not valid").isEmail().equals('motors@live.ru'),
+                check("email", "email is not valid").isEmail().equals("motors@live.ru"),
                 check("password", "password must be at least 4 characters long").isLength({min: 4}).custom((value, {req, location, path}) => {
                     if (value !== req.body.confirmPassword) {
                         throw new Error("passwords don't match");
@@ -28,10 +28,10 @@ export const validate = (method: ActionType) => {
                         return value;
                     }
                 }),
-            ]
+            ];
         }
     }
-}
+};
 
 /**
  * GET /login

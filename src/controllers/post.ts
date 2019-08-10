@@ -9,23 +9,23 @@ export const validate = (method: ActionType) => {
         case ActionType.create: {
             return [
                 check("url", "incorrect url").isURL(),
-            ]
+            ];
         }
     }
-}
+};
 
 /**
  * GET /post
  * Posts page.
  */
 export const getPosts = (req: Request, res: Response) => {
-    Post.find().sort({'_id': -1}).exec((err, articles) => {
+    Post.find().sort({"_id": -1}).exec((err, articles) => {
         if (!err) {
             return res.send(articles);
         } else {
             res.statusCode = 500;
             // log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({error: 'server error'});
+            return res.send({error: "server error"});
         }
     });
 };
