@@ -48,6 +48,7 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate('local', (err: Error, user: UserDocument, info: IVerifyOptions) => {
         if (err) {return next(err)}
         if (!user) {
+            res.statusCode = 400
             return res.send({error: info.message})
         }
         req.logIn(user, (err) => {
