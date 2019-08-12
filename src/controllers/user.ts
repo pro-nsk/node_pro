@@ -2,7 +2,7 @@ import passport from 'passport'
 import {User, UserDocument} from '../models/User'
 import {Request, Response, NextFunction} from 'express'
 import {IVerifyOptions} from 'passport-local'
-import {check, sanitize, validationResult} from 'express-validator'
+import {sanitize, validationResult, check} from 'express-validator'
 import '../config/passport'
 import {ActionType} from '../util/enums'
 
