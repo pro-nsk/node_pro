@@ -86,7 +86,10 @@ app.use(
 )
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', req.get('origin'))
+    let origin = req.get('origin')
+    if (origin != undefined) {
+        res.header('Access-Control-Allow-Origin', origin)
+    } 
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
     res.header('Access-Control-Allow-Credentials', 'true')
