@@ -103,9 +103,8 @@ app.get('/post', postController.getPosts)
 app.post('/post', postController.validate(create), passportConfig.isAuthenticated, postController.createPost)
 app.delete('/post/:id', passportConfig.isAuthenticated, postController.deletePost)
 
-app.post('/login', userController.validate(login), userController.postLogin)
 app.get('/logout', userController.logout)
-
+app.post('/login', userController.validate(login), userController.postLogin)
 app.post('/register',userController.validate(create),userController.postRegister)
 
 export default app
