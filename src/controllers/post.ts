@@ -1,13 +1,21 @@
 import {Request, Response, NextFunction} from 'express'
-import {Post} from '../models/Post'
-import {check, validationResult} from 'express-validator'
+import {Post, PostDocument} from '../models/Post'
+import {check, validationResult, sanitize} from 'express-validator'
 import {ActionType} from '../util/enums'
 
 export const validate = (method: ActionType) => {
     switch (method) {
         case ActionType.create: {
             return [
-                check('url', 'incorrect url').isURL(),
+                check('imageUrl', 'incorrect image url').isURL(),
+                check('urlName', 'spaces are not allowed in url name').not().contains(' '),
+                sanitize('urlName').customSanitizer(url => {
+                    if(url && url.length == 0) {
+                        return undefined
+                    } else {
+                        return url
+                    }
+                })
             ]
         }
     }
@@ -23,11 +31,50 @@ export const getPosts = (req: Request, res: Response) => {
             return res.send(articles)
         } else {
             res.statusCode = 500
-            // log.error('Internal error(%d): %s',res.statusCode,err.message)
             return res.send({error: 'server error'})
         }
     })
 }
+
+/**
+ * GET /post/id
+ * Post entity.
+ */
+export const getPost = (req: Request, res: Response) => {
+    Post.findById(req.params.id, (err, article) => {
+        if(!article) {
+            res.statusCode = 404
+            return res.send({ error: 'not found' })
+        }
+        if (!err) {
+            return res.send(article)
+        } else {
+            res.statusCode = 500
+            return res.send({error: 'server error'})
+        }
+    })
+}
+
+/**
+ * GET /urlname
+ * Post entity by url name.
+ */
+export const findByUrlName = (req: Request, res: Response) => {
+    Post.findOne({urlName: req.params.urlname}, (err, post) => {
+        if(!post) {
+            res.statusCode = 404
+            return res.send({ error: 'not found' })
+        }
+        if (!err) {
+            res.statusCode = 200
+            return res.send(post)
+        } else {
+            res.statusCode = 500
+            return res.send({error: 'server error'})
+        }
+    })
+}
+
 
 /**
  * POST /post
@@ -38,17 +85,79 @@ export const createPost = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
-        // req.flash('errors', errors.array())
         res.statusCode = 400
+        //TODO: rework of send errors
         return res.send({error: errors.array()[0].msg})
     }
 
     let post = new Post({
-        url: req.body.url
+        urlName: req.body.urlName,
+        imageUrl: req.body.imageUrl,
+        text: req.body.text
     })
 
-    post.save(e => {
-        return res.sendStatus(200)
+    Post.findOne({urlName: req.body.urlName}, (err, existingPost) => {
+        if (err) {return next(err)}
+        if (existingPost) {
+            res.statusCode = 400
+            return res.send({error: 'post with that url name already exists'})
+        }
+        post.save(err => {
+            if (!err) {
+                return res.sendStatus(200)
+            } else {
+                res.statusCode = 500
+                return res.send({error: 'server error'})
+            }
+        })
+    })   
+}
+
+/**
+ * PUT /post/:id
+ * Edit post.
+ */
+export const editPost = (req: Request, res: Response, next: NextFunction) => {
+
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+        res.statusCode = 400
+        //TODO: rework of send errors
+        return res.send({error: errors.array()[0].msg})
+    }
+
+    Post.findById(req.params.id, (err, post) => {
+        if(!post) {
+            res.statusCode = 404
+            return res.send({ error: 'not found' })
+        }
+
+        post.urlName = req.body.urlName
+        post.imageUrl = req.body.imageUrl
+        post.text = req.body.text
+
+        let saveFunc = (post: PostDocument) => post.save(err => {
+            if (!err) {
+                return res.sendStatus(200)
+            } else {
+                res.statusCode = 500
+                return res.send({error: 'server error'})
+            }
+        })
+
+        if (req.body.urlName != undefined) {
+            Post.findOne({urlName: req.body.urlName}, (err, existingPost) => {
+                if (err) {return next(err)}
+                if (existingPost && existingPost._id != req.params.id) {
+                    res.statusCode = 400
+                    return res.send({error: 'post with that url name already exists'})
+                }
+                saveFunc(post) 
+            }) 
+        } else {
+            saveFunc(post)
+        }
     })
 }
 
@@ -60,14 +169,14 @@ export const deletePost = (req: Request, res: Response) => {
     Post.findById(req.params.id, (err, article) => {
         if (!article) {
             res.statusCode = 404
-            return res.send({ error: 'not found' })
+            return res.send({error: 'not found'})
         }
         return article.remove(err => {
             if (!err) {
                 return res.sendStatus(200)
             } else {
                 res.statusCode = 500
-                return res.send({ error: 'server error' })
+                return res.send({error: 'server error'})
             }
         })
     })

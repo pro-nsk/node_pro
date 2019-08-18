@@ -100,11 +100,15 @@ app.use((req, res, next) => {
  * Primary app routes.
  */
 app.get('/post', postController.getPosts)
+app.get('/post/:id', postController.getPost)
 app.post('/post', postController.validate(create), passportConfig.isAuthenticated, postController.createPost)
+app.put('/post/:id', postController.validate(create), passportConfig.isAuthenticated, postController.editPost)
 app.delete('/post/:id', passportConfig.isAuthenticated, postController.deletePost)
 
 app.get('/logout', userController.logout)
 app.post('/login', userController.validate(login), userController.postLogin)
 app.post('/register',userController.validate(create),userController.postRegister)
+
+app.get('/:urlname', postController.findByUrlName)
 
 export default app

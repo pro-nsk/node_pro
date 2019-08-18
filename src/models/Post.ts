@@ -1,11 +1,15 @@
 import mongoose from 'mongoose'
 
 export type PostDocument = mongoose.Document & {
-    url: string
+    urlName: string
+    imageUrl: string
+    text: string
 }
 
 const postSchema = new mongoose.Schema({
-    url: String
+    urlName: String,
+    imageUrl: String,
+    text: String
 })
 
 export const Post = mongoose.model<PostDocument>('Post', postSchema)
