@@ -26,9 +26,15 @@ export const validate = (method: ActionType) => {
  * Posts page.
  */
 export const getPosts = (req: Request, res: Response) => {
-    Post.find().sort({'_id': -1}).exec((err, articles) => {
+    Post.find().sort({'_id': -1}).exec((err, posts) => {
         if (!err) {
-            return res.send(articles)
+            posts.forEach(post => {
+                if (post.text && post.text.length > 200) {
+                    post.text = post.text.substring(0, 200) + '... '
+                }
+            })
+            res.statusCode = 200
+            return res.send(posts)
         } else {
             res.statusCode = 500
             return res.send({error: 'server error'})
