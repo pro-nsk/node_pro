@@ -10,7 +10,7 @@ export const validate = (method: ActionType) => {
                 check('imageUrl', 'incorrect image url').isURL(),
                 check('urlName', 'spaces are not allowed in url name').not().contains(' '),
                 sanitize('urlName').customSanitizer(url => {
-                    if (url && url.length == 0) {
+                    if (url != undefined && url.length == 0) {
                         return undefined
                     } else {
                         return url
