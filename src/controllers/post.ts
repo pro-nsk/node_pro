@@ -9,6 +9,11 @@ export const validate = (method: ActionType) => {
             return [
                 check('imageUrl', 'incorrect image url').isURL(),
                 check('urlName', 'spaces are not allowed in url name').not().contains(' '),
+                check('urlName', 'reserved url name').not().equals('create'),
+                check('urlName', 'reserved url name').not().equals('edit'),
+                check('urlName', 'reserved url name').not().equals('login'),
+                check('urlName', 'reserved url name').not().equals('logout'),
+                check('urlName', 'reserved url name').not().equals('register'),
                 sanitize('urlName').customSanitizer(url => {
                     if (url != undefined && url.length == 0) {
                         return undefined
