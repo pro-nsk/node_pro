@@ -6,7 +6,7 @@ describe('POST /login', () => {
     it('should return some defined error message with valid parameters', (done) => {
         return request(app).post('/login')
             .field('email', 'john@me.com')
-            .field('password', 'Hunter2')
+            .field('password', 'Hunter3')
             .expect(302)
             .end(function(err, res) {
                 expect(res.error).not.to.be.undefined
