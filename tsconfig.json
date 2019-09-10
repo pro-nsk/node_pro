@@ -8,7 +8,7 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
-        "noUnusedLocals": true,
+        "noUnusedLocals": true
         // "baseUrl": ".",
         // "paths": {
         //     "*": [
