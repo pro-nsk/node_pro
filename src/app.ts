@@ -79,7 +79,10 @@ app.use((req, res, next) => {
 /**
  * Primary app routes.
  */
-app.get('/post', postController.getPosts)
+app.get('/home/:page', postController.getPosts)
+
+app.get('/menu', postController.getPostList)
+
 app.get('/post/:id', postController.getPost)
 app.post('/post', postController.validate(create), passportConfig.isAuthenticated, postController.createPost)
 app.put('/post/:id', postController.validate(create), passportConfig.isAuthenticated, postController.editPost)

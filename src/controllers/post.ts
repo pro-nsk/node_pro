@@ -3,6 +3,8 @@ import {Post, PostDocument} from '../models/Post'
 import {check, validationResult, sanitize} from 'express-validator'
 import {ActionType} from '../util/enums'
 
+const PAGE_SIZE = 10
+
 export const validate = (method: ActionType) => {
     switch (method) {
         case ActionType.create: {
@@ -27,17 +29,33 @@ export const validate = (method: ActionType) => {
 }
 
 /**
- * GET /post
- * Posts page.
+ * GET /home/:page
+ * Home page.
  */
 export const getPosts = (req: Request, res: Response) => {
-    Post.find().sort({'_id': -1}).exec((err, posts) => {
+    Post.find().sort({'_id': -1}).skip(PAGE_SIZE * req.params.page).limit(PAGE_SIZE).exec((err, posts) => {
         if (!err) {
             posts.forEach(post => {
                 if (post.text && post.text.length > 200) {
                     post.text = post.text.substring(0, 200) + '... '
                 }
             })
+            res.statusCode = 200
+            return res.send(posts)
+        } else {
+            res.statusCode = 500
+            return res.send({error: 'server error'})
+        }
+    })
+}
+
+/**
+ * GET /menu
+ * Post list.
+ */
+export const getPostList = (req: Request, res: Response) => {
+    Post.find({urlName: {$exists: true}}).select('urlName').sort({'_id': -1}).exec((err, posts) => {
+        if (!err) {
             res.statusCode = 200
             return res.send(posts)
         } else {
