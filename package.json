@@ -22,7 +22,7 @@
     "debug": "npm run build && npm run watch-debug",
     "serve-debug": "nodemon --inspect dist/server.js",
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run serve-debug\"",
-    "arch": "del node.zip && 7z a -tzip -mx5 -r0 -xr!dist -xr!node_modules -xr!.vscode -xr!.git -xr!.env -xr!coverage -xr!test ./node.zip"
+    "arch": "del node.zip && 7z a -tzip -mx5 -r0 -xr!dist -xr!node_modules -xr!.vscode -xr!.git -xr!.env -xr!coverage -xr!test -xr!node.sh ./node.zip"
   },
   "dependencies": {
     "async": "^3.0.1",

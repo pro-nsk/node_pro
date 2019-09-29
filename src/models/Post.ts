@@ -7,7 +7,7 @@ export type PostDocument = mongoose.Document & {
 }
 
 const postSchema = new mongoose.Schema({
-    urlName: String,
+    urlName: {type: String, index: true},
     imageUrl: String,
     text: String
 })
