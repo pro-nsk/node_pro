@@ -94,4 +94,6 @@ app.post('/register',userController.validate(create),userController.postRegister
 
 app.get('/:urlname', postController.findByUrlName)
 
+app.post('/createsend', postController.testResponse)
+
 export default app
