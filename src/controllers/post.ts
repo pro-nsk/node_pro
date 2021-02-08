@@ -4,6 +4,7 @@ import {check, validationResult, sanitize} from 'express-validator'
 import {ActionType} from '../util/enums'
 
 const PAGE_SIZE = 10
+const RANDOM_SIZE = 9
 
 export const validate = (method: ActionType) => {
     switch (method) {
@@ -39,6 +40,26 @@ export const getPosts = (req: Request, res: Response) => {
                 if (post.text && post.text.length > 200) {
                     post.text = post.text.substring(0, 200) + '... '
                 }
+            })
+            res.statusCode = 200
+            return res.send(posts)
+        } else {
+            res.statusCode = 500
+            return res.send({error: 'server error'})
+        }
+    })
+}
+
+/**
+ * GET /home
+ * Home page.
+ */
+export const getRandomPosts = (req: Request, res: Response) => {
+    Post.findRandom({}, {}, {limit: RANDOM_SIZE}, function(err, posts) {
+        if (!err) {
+            posts.forEach(post => {
+                // post.urlName = undefined
+                // post.text = undefined
             })
             res.statusCode = 200
             return res.send(posts)

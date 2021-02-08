@@ -534,6 +534,13 @@
     "@types/bson" "*"
     "@types/node" "*"
 
+"@types/mongoose-simple-random@^0.4.8":
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/@types/mongoose-simple-random/-/mongoose-simple-random-0.4.8.tgz#8493e8e75522e328f394ee91b72e2c1a27f500f1"
+  integrity sha512-gYpj18zhiMEdJ75HHX0QKPYlNDh0sf2V4R726SDMFA4TEL+Z4DUVrBbyzvwEzYiM1ogdaDxUJ7Qg/UiFvShATw==
+  dependencies:
+    "@types/mongoose" "*"
+
 "@types/mongoose@*", "@types/mongoose@^5.5.6":
   version "5.5.11"
   resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.5.11.tgz#8562bb84b4f3f41aebec27f263607bfe2183729e"
@@ -3727,6 +3734,11 @@ mongoose-legacy-pluralize@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
+
+mongoose-simple-random@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/mongoose-simple-random/-/mongoose-simple-random-0.4.1.tgz#09054d8555826730209a7405b1d73cb4a8f91aa3"
+  integrity sha1-CQVNhVWCZzAgmnQFsdc8tKj5GqM=
 
 mongoose@^5.6.0:
   version "5.6.7"

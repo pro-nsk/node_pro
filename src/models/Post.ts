@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import random from 'mongoose-simple-random'
 
 export type PostDocument = mongoose.Document & {
     urlName: string
@@ -11,5 +12,7 @@ const postSchema = new mongoose.Schema({
     imageUrl: String,
     text: String
 })
+
+postSchema.plugin(random)
 
 export const Post = mongoose.model<PostDocument>('Post', postSchema)

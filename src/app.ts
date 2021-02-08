@@ -79,7 +79,7 @@ app.use((req, res, next) => {
 /**
  * Primary app routes.
  */
-app.get('/home/:page', postController.getPosts)
+app.get('/home/:page', postController.getRandomPosts)
 
 app.get('/menu', postController.getPostList)
 
